@@ -6,7 +6,6 @@ Inductive multi {X : Type} (R : relation X) : relation X :=
 | multi_refl : ∀ (x : X), multi R x x
 | multi_step : ∀ (x y z : X), R x y → multi R y z → multi R x z.
 
-Notation "t '-->*' t'" := (multi step t t') (at level 40).
 
 Theorem multi_R : ∀ {X : Type} (R : relation X) (x y : X),
   R x y → multi R x y.
@@ -25,6 +24,10 @@ Proof.
   - assumption.
   - eapply multi_step; eauto.
 Qed.
+
+Module ThisChapter.
+
+Notation "t '-->*' t'" := (multi step t t') (at level 40).
 
 Definition step_normal_form := normal_form step.
 
@@ -189,3 +192,5 @@ Proof.
   intros.
   split. apply evalF__eval. apply eval__evalF.
 Qed.
+
+End ThisChapter.
