@@ -48,29 +48,29 @@ Definition t_update {A:Type} (m : total_map A)
                     (x : string) (v : A) :=
   fun x' => if beq_string x x' then v else m x'.
 
-Notation "{ --> d }" := (t_empty d) (at level 0).
+Notation "{ ==> d }" := (t_empty d) (at level 0).
 
-Notation "m '&' { a --> x }" :=
+Notation "m '&' { a ==> x }" :=
   (t_update m a x) (at level 20).
-Notation "m '&' { a --> x ; b --> y }" :=
-  (t_update (m & { a --> x }) b y) (at level 20).
-Notation "m '&' { a --> x ; b --> y ; c --> z }" :=
-  (t_update (m & { a --> x ; b --> y }) c z) (at level 20).
-Notation "m '&' { a --> x ; b --> y ; c --> z ; d --> t }" :=
-    (t_update (m & { a --> x ; b --> y ; c --> z }) d t) (at level 20).
-Notation "m '&' { a --> x ; b --> y ; c --> z ; d --> t ; e --> u }" :=
-    (t_update (m & { a --> x ; b --> y ; c --> z ; d --> t }) e u) (at level 20).
-Notation "m '&' { a --> x ; b --> y ; c --> z ; d --> t ; e --> u ; f --> v }" :=
-    (t_update (m & { a --> x ; b --> y ; c --> z ; d --> t ; e --> u }) f v) (at level 20).
+Notation "m '&' { a ==> x ; b ==> y }" :=
+  (t_update (m & { a ==> x }) b y) (at level 20).
+Notation "m '&' { a ==> x ; b ==> y ; c ==> z }" :=
+  (t_update (m & { a ==> x ; b ==> y }) c z) (at level 20).
+Notation "m '&' { a ==> x ; b ==> y ; c ==> z ; d ==> t }" :=
+    (t_update (m & { a ==> x ; b ==> y ; c ==> z }) d t) (at level 20).
+Notation "m '&' { a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u }" :=
+    (t_update (m & { a ==> x ; b ==> y ; c ==> z ; d ==> t }) e u) (at level 20).
+Notation "m '&' { a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u ; f ==> v }" :=
+    (t_update (m & { a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u }) f v) (at level 20).
 
-Lemma t_apply_empty:  forall (A:Type) (x: string) (v: A), { --> v } x = v.
+Lemma t_apply_empty:  forall (A:Type) (x: string) (v: A), { ==> v } x = v.
 Proof.
   intros A x v.
   now unfold t_empty.
 Qed.
 
 Lemma t_update_eq : forall A (m: total_map A) x v,
-  (m & {x --> v}) x = v.
+  (m & {x ==> v}) x = v.
 Proof.
   intros A m x v.
   unfold t_update.
@@ -80,7 +80,7 @@ Qed.
 Theorem t_update_neq : forall (X:Type) v x1 x2
                          (m : total_map X),
   x1 <> x2 ->
-  (m & {x1 --> v}) x2 = m x2.
+  (m & {x1 ==> v}) x2 = m x2.
 Proof.
   intros X v x1 x2 m NE.
   unfold t_update.
@@ -89,7 +89,7 @@ Proof.
 Qed.
 
 Lemma t_update_shadow : forall A (m: total_map A) v1 v2 x,
-    m & {x --> v1 ; x --> v2} = m & {x --> v2}.
+    m & {x ==> v1 ; x ==> v2} = m & {x ==> v2}.
 Proof.
   intros A m v1 v2 x.
   unfold t_update.
@@ -107,7 +107,7 @@ Proof.
 Qed.
 
 Theorem t_update_same : forall X x (m : total_map X),
-    m & { x --> m x } = m.
+    m & { x ==> m x } = m.
 Proof.
   intros X x m.
   unfold t_update.
@@ -120,8 +120,8 @@ Qed.
 Theorem t_update_permute : forall (X:Type) v1 v2 x1 x2
                              (m : total_map X),
   x2 <> x1 ->
-  m & { x2 --> v2 ; x1 --> v1 }
-  =  m & { x1 --> v1 ; x2 --> v2 }.
+  m & { x2 ==> v2 ; x1 ==> v1 }
+  =  m & { x1 ==> v1 ; x2 ==> v2 }.
 Proof.
   intros X v1 v2 x1 x2 m NE.
   unfold t_update.
@@ -142,20 +142,20 @@ Definition empty {A:Type} : partial_map A :=
 
 Definition update {A:Type} (m : partial_map A)
            (x : string) (v : A) :=
-  m & { x --> (Some v) }.
+  m & { x ==> (Some v) }.
 
-Notation "m '&' {{ a --> x }}" :=
+Notation "m '&' {{ a ==> x }}" :=
   (update m a x) (at level 20).
-Notation "m '&' {{ a --> x ; b --> y }}" :=
-  (update (m & {{ a --> x }}) b y) (at level 20).
-Notation "m '&' {{ a --> x ; b --> y ; c --> z }}" :=
-  (update (m & {{ a --> x ; b --> y }}) c z) (at level 20).
-Notation "m '&' {{ a --> x ; b --> y ; c --> z ; d --> t }}" :=
-    (update (m & {{ a --> x ; b --> y ; c --> z }}) d t) (at level 20).
-Notation "m '&' {{ a --> x ; b --> y ; c --> z ; d --> t ; e --> u }}" :=
-    (update (m & {{ a --> x ; b --> y ; c --> z ; d --> t }}) e u) (at level 20).
-Notation "m '&' {{ a --> x ; b --> y ; c --> z ; d --> t ; e --> u ; f --> v }}" :=
-    (update (m & {{ a --> x ; b --> y ; c --> z ; d --> t ; e --> u }}) f v) (at level 20).
+Notation "m '&' {{ a ==> x ; b ==> y }}" :=
+  (update (m & {{ a ==> x }}) b y) (at level 20).
+Notation "m '&' {{ a ==> x ; b ==> y ; c ==> z }}" :=
+  (update (m & {{ a ==> x ; b ==> y }}) c z) (at level 20).
+Notation "m '&' {{ a ==> x ; b ==> y ; c ==> z ; d ==> t }}" :=
+    (update (m & {{ a ==> x ; b ==> y ; c ==> z }}) d t) (at level 20).
+Notation "m '&' {{ a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u }}" :=
+    (update (m & {{ a ==> x ; b ==> y ; c ==> z ; d ==> t }}) e u) (at level 20).
+Notation "m '&' {{ a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u ; f ==> v }}" :=
+    (update (m & {{ a ==> x ; b ==> y ; c ==> z ; d ==> t ; e ==> u }}) f v) (at level 20).
 
 Lemma apply_empty : forall (A: Type) (x: string),  @empty A x = None.
 Proof.
@@ -164,7 +164,7 @@ Proof.
 Qed.
 
 Lemma update_eq : forall A (m: partial_map A) x v,
-    (m & {{ x --> v }}) x = Some v.
+    (m & {{ x ==> v }}) x = Some v.
 Proof.
   intros. unfold update. rewrite t_update_eq.
   reflexivity.
@@ -173,14 +173,14 @@ Qed.
 Theorem update_neq : forall (X:Type) v x1 x2
                        (m : partial_map X),
   x2 <> x1 ->
-  (m & {{ x2 --> v }}) x1 = m x1.
+  (m & {{ x2 ==> v }}) x1 = m x1.
 Proof.
   intros X v x1 x2 m H.
   unfold update. rewrite t_update_neq. reflexivity.
   apply H. Qed.
 
 Lemma update_shadow : forall A (m: partial_map A) v1 v2 x,
-    m & {{ x --> v1 ; x --> v2 }} = m & {{x --> v2}}.
+    m & {{ x ==> v1 ; x ==> v2 }} = m & {{x ==> v2}}.
 Proof.
   intros A m v1 v2 x1. unfold update. rewrite t_update_shadow.
   reflexivity.
@@ -188,7 +188,7 @@ Qed.
 
 Theorem update_same : forall X v x (m : partial_map X),
   m x = Some v ->
-  m & {{x --> v}} = m.
+  m & {{x ==> v}} = m.
 Proof.
   intros X v x m H. unfold update. rewrite <- H.
   apply t_update_same.
@@ -197,8 +197,8 @@ Qed.
 Theorem update_permute : forall (X:Type) v1 v2 x1 x2
                                 (m : partial_map X),
   x2 <> x1 ->
-  m & {{x2 --> v2 ; x1 --> v1}}
-  = m & {{x1 --> v1 ; x2 --> v2}}.
+  m & {{x2 ==> v2 ; x1 ==> v1}}
+  = m & {{x1 ==> v1 ; x2 ==> v2}}.
 Proof.
   intros X v1 v2 x1 x2 m. unfold update.
   apply t_update_permute.
