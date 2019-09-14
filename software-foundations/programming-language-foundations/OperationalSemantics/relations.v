@@ -1,8 +1,6 @@
 Require Export OperationalSemantics.tm.
 Require Import Relations.
-
-Definition deterministic {X : Type} (R : relation X) :=
-  ∀ x y1 y2 : X, R x y1 → R x y2 → y1 = y2.
+Require Import OperationalSemantics.general.
 
 Ltac solve_by_inverts n :=
   match goal with
@@ -56,9 +54,6 @@ Proof.
       exists (P t' t2).
       now apply ST_Plus1.
 Qed.
-
-Definition normal_form {X : Type} (R : relation X) (t : X) : Prop :=
-  ¬ ∃ t', R t t'.
 
 Lemma value_is_nf :
   ∀ v, value v → normal_form step v.

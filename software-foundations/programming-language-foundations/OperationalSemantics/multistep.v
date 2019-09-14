@@ -1,31 +1,7 @@
 Require Import OperationalSemantics.tm.
 Require Import OperationalSemantics.relations.
+Require Import OperationalSemantics.general.
 Require Import Relations.
-
-Inductive multi {X : Type} (R : relation X) : relation X :=
-| multi_refl : ∀ (x : X), multi R x x
-| multi_step : ∀ (x y z : X), R x y → multi R y z → multi R x z.
-
-
-Theorem multi_R : ∀ {X : Type} (R : relation X) (x y : X),
-  R x y → multi R x y.
-Proof.
-  intros X R x y Rxy.
-  apply multi_step with y.
-  - assumption.
-  - constructor.
-Qed.
-
-Theorem multi_trans : ∀ {X : Type} (R : relation X) (x y z : X),
-  multi R x y → multi R y z → multi R x z.
-Proof.
-  intros X R x y z Rxy Ryz.
-  induction Rxy.
-  - assumption.
-  - eapply multi_step; eauto.
-Qed.
-
-Module ThisChapter.
 
 Notation "t '-->*' t'" := (multi step t t') (at level 40).
 
@@ -81,9 +57,6 @@ Proof.
     + now apply ST_Plus2.
     + assumption.
 Qed.
-
-Definition normalizing {X : Type} (R : relation X) :=
-  ∀ t, ∃ t', multi R t t' ∧ normal_form R t'.
 
 Theorem step_normalizing : normalizing step.
 Proof.
@@ -192,5 +165,3 @@ Proof.
   intros.
   split. apply evalF__eval. apply eval__evalF.
 Qed.
-
-End ThisChapter.

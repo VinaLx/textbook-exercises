@@ -1,5 +1,5 @@
 Require Export STLC.language.
-Require Import OperationalSemantics.multistep.
+Require Import OperationalSemantics.general.
 
 Reserved Notation "'[' x ':=' s ']' t" (at level 20).
 
