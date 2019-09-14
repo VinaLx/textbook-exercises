@@ -204,3 +204,12 @@ Proof.
   apply t_update_permute.
 Qed.
 
+Lemma beq_eqb_iff : forall s t b,
+  beq_string s t = b <-> eqb s t = b.
+Proof.
+  intros s t. split; destruct b; intro H.
+  + apply eqb_eq . now apply beq_string_true_iff.
+  + apply eqb_neq. now apply beq_string_false_iff.
+  + apply beq_string_true_iff . now apply eqb_eq.
+  + apply beq_string_false_iff. now apply eqb_neq.
+Qed.
